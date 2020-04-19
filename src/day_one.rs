@@ -2,10 +2,6 @@
 use std::io;
 use std::io::BufRead;
 
-fn fuel_per_mod(weight: u32) -> u32 {
-    weight/3-2
-}
-
 pub fn sum_of_fuel_required() -> u32 {
     let stdin = io::stdin();
     let mut sum: u32 = 0;
@@ -15,10 +11,19 @@ To finish, press `ENTER` on empty line of input."#);
         let input = line.unwrap();
         let strip = input.trim();
         match strip.parse::<u32>() {
-            Ok(i) => sum += fuel_per_mod(i),
+            Ok(i) => sum += i/3-2,
             Err(..) => break,
         }
     }
-
+    
+    let mut fuel = sum.clone();
+    let mut offset = fuel/3-2;
+    // Part Two: Fuel to lift fuel
+    while offset > 0 {
+        offset = fuel/3-2;
+        fuel-= offset;
+        sum+= offset;
+    }
+    
     sum
 }
